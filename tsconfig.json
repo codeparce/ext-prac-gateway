@@ -6,10 +6,13 @@
     "outDir": "./dist",
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "module": "ES2020",
-    "moduleResolution": "node",
-    "verbatimModuleSyntax": false,
-    "target": "esnext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "target": "ES2023",
+    "strict": true,
+    "esModuleInterop": true,
+    "ignoreDeprecations": "6.0",
+    
     "types": [],
     // For nodejs:
     // "lib": ["esnext"],
