@@ -1,0 +1,24 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+}
+
+model Service {
+    id        Int      @id @default(autoincrement())
+    name      String   @unique
+    url       String
+    createdAt DateTime @default(now())
+    paths     Path[]
+}
+
+model Path {
+    id        Int      @id @default(autoincrement())
+    name      String   @unique
+    path      String
+    serviceId Int
+    service   Service  @relation(fields: [serviceId], references: [id])
+    createdAt DateTime @default(now())
+}
