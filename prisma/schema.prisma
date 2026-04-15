@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client"
-  output   = "../generated/prisma"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -20,14 +20,14 @@ model service {
   name      String     @unique @db.VarChar
   url       String     @db.VarChar
   createdAt DateTime   @default(now()) @db.Timestamp(6)
-  endpoints endpoint[]
+  // endpoints endpoint[]
 }
 
-model endpoint {
-  id        String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  path      String   @db.VarChar
-  method    String   @db.VarChar
-  serviceId String   @db.Uuid
-  createdAt DateTime @default(now()) @db.Timestamp(6)
-  service   service  @relation(fields: [serviceId], references: [id])
-}
+// model endpoint {
+//   id        String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+//   path      String   @db.VarChar
+//   method    String   @db.VarChar
+//   serviceId String   @db.Uuid
+//   createdAt DateTime @default(now()) @db.Timestamp(6)
+//   service   service  @relation(fields: [serviceId], references: [id])
+// }
