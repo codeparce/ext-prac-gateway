@@ -5,10 +5,6 @@ pnpm-lock.yaml
 
 node_modules
 
-/src/generated/prisma
-
-/generated/prisma
-
-/generated/prisma
+/src/generated/
 
 /dist
