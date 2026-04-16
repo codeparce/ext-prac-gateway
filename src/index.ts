@@ -5,6 +5,7 @@ import "reflect-metadata";
 
 import { AppDataSource } from "./database";
 import { Service } from "./entities/Service";
+import { json } from 'node:stream/consumers';
 
 await AppDataSource.initialize();
 
@@ -32,13 +33,19 @@ app.all('/api/:service', async (req, res) => {
         if (!data[0]) {
             return res.status(404).json({ error: "Service not found" });
         }
+        
+        const targetUrl = `http://${data[0]?.service}/${data[0]?.name}/${splat}`;
 
-        const targetUrl = `http://${data[0]?.service}/${data[0]?.name}`;
-
-        const response = await fetch(targetUrl, {
+        const requestInit: RequestInit = {
             method: req.method,
-            body: req.body
-        });
+            headers: { "Content-Type": "application/json" },
+            mode: "cors",
+            cache: "default",
+            body: JSON.stringify(req.body)
+        };
+
+
+        const response = await fetch(targetUrl, requestInit);
 
         const result = await response.json();
 
@@ -63,13 +70,17 @@ app.all('/api/:service/*path', async (req, res) => {
         if (!data[0]) {
             return res.status(404).json({ error: "Service not found" });
         }
+
         const targetUrl = `http://${data[0]?.service}/${data[0]?.name}/${splat}`;
 
-        const response = await fetch(targetUrl, {
+        const requestInit: RequestInit = {
             method: req.method,
+            mode: "cors",
+            cache: "default",
             body: req.body
+        };
 
-        });
+        const response = await fetch(targetUrl, requestInit);
 
         const result = await response.json();
 
@@ -77,7 +88,7 @@ app.all('/api/:service/*path', async (req, res) => {
 
     } catch (error: any) {
         console.error("ERROR :", error);
-        return res.status(500).json({ error: error.message || 'Internal Server Error' });
+        return res.status(500).json({ error: error || 'Internal Server Error' });
     }
 
 });
