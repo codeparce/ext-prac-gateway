@@ -33,7 +33,7 @@ app.all('/api/:service', async (req, res) => {
             return res.status(404).json({ error: "Service not found" });
         }
 
-        const targetUrl = `${data[0]?.service}/${data[0]?.name}`;
+        const targetUrl = `http://${data[0]?.service}/${data[0]?.name}`;
 
 
         const response = await fetch(targetUrl, {
