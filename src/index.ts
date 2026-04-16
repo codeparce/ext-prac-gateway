@@ -35,10 +35,9 @@ app.all('/api/:service', async (req, res) => {
 
         const targetUrl = `http://${data[0]?.service}/${data[0]?.name}`;
 
-
         const response = await fetch(targetUrl, {
             method: req.method,
-            ...req.body
+            body: req.body
         });
 
         const result = await response.json();
@@ -68,7 +67,8 @@ app.all('/api/:service/*path', async (req, res) => {
 
         const response = await fetch(targetUrl, {
             method: req.method,
-            ...req.body
+            body: req.body
+
         });
 
         const result = await response.json();
