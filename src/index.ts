@@ -38,7 +38,7 @@ app.all('/api/:service', async (req, res) => {
 
         const response = await fetch(targetUrl, {
             method: req.method,
-            body: JSON.stringify(req.body)
+            ...req.body
         });
 
         const result = await response.json();
@@ -46,6 +46,7 @@ app.all('/api/:service', async (req, res) => {
         return res.status(response.status).json(result);
 
     } catch (error: any) {
+        console.error("ERROR :", error);
         return res.status(500).json({ error: error.message || 'Internal Server Error' });
     }
 
@@ -67,7 +68,7 @@ app.all('/api/:service/*path', async (req, res) => {
 
         const response = await fetch(targetUrl, {
             method: req.method,
-            body: JSON.stringify(req.body)
+            ...req.body
         });
 
         const result = await response.json();
@@ -75,6 +76,7 @@ app.all('/api/:service/*path', async (req, res) => {
         return res.status(response.status).json(result);
 
     } catch (error: any) {
+        console.error("ERROR :", error);
         return res.status(500).json({ error: error.message || 'Internal Server Error' });
     }
 
