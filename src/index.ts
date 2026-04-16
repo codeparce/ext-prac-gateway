@@ -44,7 +44,6 @@ app.all('/api/:service', async (req, res) => {
             body: JSON.stringify(req.body)
         };
 
-
         const response = await fetch(targetUrl, requestInit);
 
         const result = await response.json();
@@ -79,7 +78,7 @@ app.all('/api/:service/*path', async (req, res) => {
             cache: "default",
             body: JSON.stringify(req.body)
         };
-
+        
         const response = await fetch(targetUrl, requestInit);
 
         const result = await response.json();
