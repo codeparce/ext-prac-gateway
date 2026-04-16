@@ -33,7 +33,7 @@ app.all('/api/:service', async (req, res) => {
         if (!data[0]) {
             return res.status(404).json({ error: "Service not found" });
         }
-        
+
         const targetUrl = `http://${data[0]?.service}/${data[0]?.name}/`;
 
         const requestInit: RequestInit = {
@@ -77,7 +77,7 @@ app.all('/api/:service/*path', async (req, res) => {
             method: req.method,
             mode: "cors",
             cache: "default",
-            body: req.body
+            body: JSON.stringify(req.body)
         };
 
         const response = await fetch(targetUrl, requestInit);
