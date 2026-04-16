@@ -74,11 +74,12 @@ app.all('/api/:service/*path', async (req, res) => {
 
         const requestInit: RequestInit = {
             method: req.method,
+            headers: { "Content-Type": "application/json" },
             mode: "cors",
             cache: "default",
             body: JSON.stringify(req.body)
         };
-        
+
         const response = await fetch(targetUrl, requestInit);
 
         const result = await response.json();
