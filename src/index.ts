@@ -1,8 +1,12 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
-import { prisma } from "./lib/prisma";
+import "reflect-metadata";
 
+import { AppDataSource } from "./database";
+import { Service } from "./entities/Service";
+
+await AppDataSource.initialize();
 
 dotenv.config();
 
@@ -23,9 +27,15 @@ app.all('/api/:service', async (req, res) => {
 
     try {
 
-        const data = await getPrismaData(service);
-        const targetUrl = `${data[0]?.url}/${service}/`;
-        
+        const data = await getServiceData(service);
+
+        if (!data[0]) {
+            return res.status(404).json({ error: "Service not found" });
+        }
+
+        const targetUrl = `${data[0]?.service}/${data[0]?.name}`;
+
+
         const response = await fetch(targetUrl, {
             method: req.method,
             body: JSON.stringify(req.body)
@@ -35,7 +45,7 @@ app.all('/api/:service', async (req, res) => {
 
         return res.status(response.status).json(result);
 
-    } catch (error : any) {
+    } catch (error: any) {
         return res.status(500).json({ error: error.message || 'Internal Server Error' });
     }
 
@@ -48,9 +58,13 @@ app.all('/api/:service/*path', async (req, res) => {
 
     try {
 
-        const data = await getPrismaData(service);
-        const targetUrl = `${data[0]?.url}/${service}/${splat}`;
-        
+        const data = await getServiceData(service);
+
+        if (!data[0]) {
+            return res.status(404).json({ error: "Service not found" });
+        }
+        const targetUrl = `${data[0]?.service}/${data[0]?.name}/${splat}`;
+
         const response = await fetch(targetUrl, {
             method: req.method,
             body: JSON.stringify(req.body)
@@ -59,21 +73,17 @@ app.all('/api/:service/*path', async (req, res) => {
         const result = await response.json();
 
         return res.status(response.status).json(result);
-        
+
     } catch (error: any) {
         return res.status(500).json({ error: error.message || 'Internal Server Error' });
     }
 
 });
 
-const getPrismaData = async (service: string) => {
-    const data = await prisma.service.findMany({
-        where: {
-            name: service
-        }
-    });
-    return data;
-}
+const getServiceData = async (serviceName: string) => {
+    const serviceRepo = AppDataSource.getRepository(Service);
+    return await serviceRepo.find({ where: { name: serviceName } });
+};
 
 app.listen(PORT, () => {
     console.log(`Gateway running on  ${process.env.GATEWAY_URL}`);
