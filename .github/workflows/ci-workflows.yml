@@ -9,5 +9,7 @@ on:
 jobs: 
   init:
     name: CI Workflow
-    uses: codeparce/ci-workflows/.github/workflows/node-init.yml@container-app
+    uses: codeparce/ci-workflows/.github/workflows/pipeline.node.cae.yml@v1
+    with:
+      cloud: azure
     secrets: inherit
